@@ -1,0 +1,19 @@
+{
+  "name": "ci-hola-mundo",
+  "version": "1.0.0",
+  "description": "Proyecto Hola Mundo con Integración Continua en GitHub Actions y alertas a ntfy.sh",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "node index.js"
+  },
+  "keywords": [
+    "devops",
+    "itla",
+    "github-actions",
+    "ci",
+    "ntfy"
+  ],
+  "author": "Isaac Cabrera",
+  "license": "MIT"
+}

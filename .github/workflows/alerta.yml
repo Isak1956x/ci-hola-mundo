@@ -1,0 +1,46 @@
+name: Alerta CI - Hola Mundo
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-notify:
+    name: Ejecutar Hola Mundo y Notificar
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar repositorio (Checkout)
+        uses: actions/checkout@v4
+
+      - name: Configurar entorno Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Ejecutar programa Hola Mundo
+        run: |
+          echo "Ejecutando el programa Hola Mundo..."
+          node index.js
+
+      - name: Enviar notificación a ntfy.sh/devops-itla
+        if: success()
+        run: |
+          curl -s \
+            -H "Title: Push en rama main - ITLA DevOps" \
+            -H "Priority: default" \
+            -H "Tags: rocket,white_check_mark,bell" \
+            -d "¡Hola Mundo ejecutado con éxito! Se ha subido nuevo código a la rama main por ${{ github.actor }}. Commit: ${{ github.sha }}" \
+            https://ntfy.sh/devops-itla
+
+      - name: Notificar error si falla el flujo
+        if: failure()
+        run: |
+          curl -s \
+            -H "Title: Fallo en el flujo CI - ITLA DevOps" \
+            -H "Priority: high" \
+            -H "Tags: warning,x" \
+            -d "Error al ejecutar el flujo CI en la rama main por ${{ github.actor }}." \
+            https://ntfy.sh/devops-itla
